@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="search.css" />
+	</head>
+	<body>
+		<table class="nav">
+			<tr>
+			<%
+				Integer curPage = Integer.parseInt((String)request.getAttribute("curPage"));
+				int pageNum = (Integer)request.getAttribute("pageNum");
+				if (curPage > 1) {
+			%>
+			<td id="firstPage">
+				<a href="search?q=<%= (String)(request.getParameter("q")).replace(" ", "+") %>&amp;numResultsToSkip=<%= request.getParameter("numResultsToSkip") %>&amp;numResultsToReturn=<%= request.getParameter("numResultsToReturn") %>">&lt;&lt;</a>
+			</td>
+			<td id="prevPage">
+				<a href="search?q=<%= (String)(request.getParameter("q")).replace(" ", "+") %>&amp;numResultsToSkip=<%= request.getParameter("numResultsToSkip") %>&amp;numResultsToReturn=<%= request.getParameter("numResultsToReturn") %>&amp;page=<%= curPage - 1 %>">Previous</a>
+			</td>
+			<%
+				}
+				int start = curPage - 2;
+				if (start < 1)
+					start = 1;
+				int last = start + 5;
+				if (last > pageNum + 1) {
+					last = pageNum + 1;
+					if (last - 5 > 0)
+						start = last - 5;
+					else
+						start = 1;
+				}
+				for (int i = start; i < last; ++i){
+					if (i == curPage){
+			%>
+			<td id="curPage"><%= curPage %></td>
+			<%
+					} else {
+			%>
+			<td class="otherPage">
+				<a href="search?q=<%= (String)(request.getParameter("q")).replace(" ", "+") %>&amp;numResultsToSkip=<%= request.getParameter("numResultsToSkip") %>&amp;numResultsToReturn=<%= request.getParameter("numResultsToReturn") %>&amp;page=<%= i %>"><%= i %></a>
+			</td>
+			<%
+					}
+				}
+			%>
+			<%
+				if ((curPage != 0) && (curPage != pageNum)) {
+			%>
+			<td id="nextPage">
+				<a href="search?q=<%= (String)(request.getParameter("q")).replace(" ", "+") %>&amp;numResultsToSkip=<%= request.getParameter("numResultsToSkip") %>&amp;numResultsToReturn=<%= request.getParameter("numResultsToReturn") %>&amp;page=<%= curPage + 1 %>">Next</a>
+			</td>
+			<td id="lastPage">
+				<a href="search?q=<%= (String)(request.getParameter("q")).replace(" ", "+") %>&amp;numResultsToSkip=<%= request.getParameter("numResultsToSkip") %>&amp;numResultsToReturn=<%= request.getParameter("numResultsToReturn") %>&amp;page=<%= pageNum %>">&gt;&gt;</a>
+			</td>
+			<%
+				}
+			%>
+			</tr>
+		</table>
+	</body>
+</html>
